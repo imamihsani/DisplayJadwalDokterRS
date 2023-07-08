@@ -6,16 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="aset/css/bootstrap.min.css" />
     <title>Display Pendaftaran | RSU Amanah Sumpiuh</title>
+    <!--DI BAWAH INI HUKUMNYA WAJIB DICANTUMKAN UNTUK MEMANGGIL JQUERYNYA-->
+      <script src="aset/jquery/dist/jquery.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+    <!--DI ATAS INI HUKUMNYA WAJIB DICANTUMKAN UNTUK MEMANGGIL JQUERYNYA-->
   </head>
   <body>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap");
-      body {
-        font-family: "Comfortaa", cursive;
-        width: 1366px;
-        height: 760px;
-      }
-    </style>
+    <!--DI BAWAH INI ADALAH SKRIP CSS UNTUK MENGATUR JENIS FONT-->
+      <style>
+        @import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap"); 
+        body {
+          font-family: "Comfortaa", cursive;
+          width: 1366px;
+          height: 760px;
+        }
+      </style>
+    <!--DI ATAS ADALAH SKRIP CSS UNTUK MENGATUR JENIS FONT-->
+
+    <!--SKRIP DI BAWAH INI UNTUK MEMBUAT AUTOREFRESH PADA DIV TERTENTU SAJA, BUKAN SATU HALAMAN PENUH DI REFRESH OTOMATIS-->
+      <script>
+      $(document).ready(function(){
+          setInterval(function(){
+            $('#autorefreshloket1').load(window.location.href + " #autorefreshloket1");
+          } , 1000);
+      });
+      $(document).ready(function(){
+          setInterval(function(){
+            $('#autorefreshloket2').load(window.location.href + " #autorefreshloket2");
+          } , 1000);
+      });
+      </script>
+    <!--DI ATAS ADALAH SKRIP UNTUK MEMBUAT AUTOREFRESH PADA DIV TERTENTU SAJA, BUKAN SATU HALAMAN PENUH DI REFRESH OTOMATIS-->
 
     <div class="container-fluid">
       <div class="row mt-2" style="height: 200px">
@@ -46,6 +68,14 @@
                 <div class="carousel-item">
                   <img
                     src="aset/gambar/IGD22.jpg"
+                    class="d-block w-100"
+                    alt="..."
+                    style="height: 210px"
+                  />
+                </div>
+				<div class="carousel-item">
+                  <img
+                    src="aset/gambar/hotlinenomor.jpg"
                     class="d-block w-100"
                     alt="..."
                     style="height: 210px"
@@ -83,22 +113,59 @@
         </div>
         <div class="col-3" style="height: 200px">
           <div class="card">
-            <p style="font-size: 10px" class="text-center">
-              Scan/masuk ke link berikut untuk survey kepuasan anda atas
-              pelayanan kami
-            </p>
-
-            <center>
-              <img
-                src="aset/gambar/barcode.gif"
-                style="width: 120px; height: 120px"
-                class="mb-1"
-              />
-            </center>
-
-            <p class="text-center text-primary">
-              bit.ly/KuesionerSKM_RSUAmanah
-            </p>
+            <!--DI BAWAH ADALAH OPSI JIKA PERLU DITAMPILKAN QRCODE KEPUASAN PASIEN-->
+              <!-- <p style="font-size: 10px" class="text-center">
+                Scan/masuk ke link berikut untuk survey kepuasan anda atas
+                pelayanan kami
+              </p>
+              <center>
+                <img
+                  src="aset/gambar/barcode.gif"
+                  style="width: 120px; height: 120px"
+                  class="mb-1"
+                />
+              </center> -->
+            <!--DI ATAS ADALAH OPSI JIKA PERLU DITAMPILKAN QRCODE KEPUASAN PASIEN-->
+            <div class="row">
+              <h4 class="text-center mt-1">ANTRIAN PASIEN</h4>
+                  <div class="col-6">
+                    <div class="card" style="background-color:mediumseagreen" id="autorefreshloket1">
+                     <?php
+                      include "connection.php";
+                      $tampilantrian = mysqli_query($connection, "SELECT POS, CARA_BAYAR, NOMOR FROM panggil_antrian WHERE STATUS = 1 AND LOKET = 1 ORDER BY TANGGAL DESC LIMIT 1");
+                      while ($antrian = mysqli_fetch_array($tampilantrian)) {
+                      ?>
+                      <h1 class="text-center"><?php echo $antrian['POS'];?><?php echo $antrian['CARA_BAYAR'];?>
+                      <hr>
+                      <?php echo $antrian['NOMOR'];?></h1>
+                      <?php } ?>
+                      <h5 class="text-center text-dark">
+                        <b>KE LOKET 1</b>
+                      </h5>
+                    </div>
+              </div>
+              <div class="col-6">
+                <div class="card bg-info" id="autorefreshloket2">
+                  <?php
+                  include "connection.php";
+                  $tampilantrian = mysqli_query($connection, "SELECT POS, CARA_BAYAR, NOMOR FROM panggil_antrian WHERE STATUS = 1 AND LOKET = 2 ORDER BY TANGGAL DESC LIMIT 1");
+                  while ($antrian = mysqli_fetch_array($tampilantrian)) {
+                  ?>
+                  <h1 class="text-center"><?php echo $antrian['POS'];?><?php echo $antrian['CARA_BAYAR'];?>
+                  <hr>
+                  <?php echo $antrian['NOMOR'];?></h1>
+                  <?php } ?>
+                  <b><h5 class="text-center text-dark">
+                    KE LOKET 2
+                  </h5></b>
+                </div>
+                  <!--OPSI JIKA PERLU DITAMPILKAN LINK KEPUASAN PASIEN-->
+                    <!-- <p class="text-center text-dark">
+                      bit.ly/KuesionerSKM_RSUAmanah
+                    </p> -->
+                  <!--DI ATAS ADALAH OPSI JIKA PERLU DITAMPILKAN LINK KEPUASAN PASIEN-->
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -207,9 +274,9 @@
               <div class="carousel-item">
                 <img src="aset/gambar/q.jpg" style="height:420px; width:350px" class="d-block w-100" alt="...">
               </div>
-              <div class="carousel-item">
+              <!-- <div class="carousel-item">
                 <img src="aset/gambar/r.jpg" style="height:420px; width:350px" class="d-block w-100" alt="...">
-              </div>
+              </div> -->
               <div class="carousel-item">
                 <img src="aset/gambar/s.jpg" style="height:420px; width:350px" class="d-block w-100" alt="...">
               </div>
@@ -220,13 +287,16 @@
                 <img src="aset/gambar/u.jpg" style="height:420px; width:350px" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="aset/gambar/v.jpg" style="height:420px; width:350px" class="d-block w-100" alt="...">
+                <img src="aset/gambar/v.jpeg" style="height:420px; width:350px" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
                 <img src="aset/gambar/w.jpg" style="height:420px; width:350px" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="aset/gambar/x.jpg" style="height:420px; width:350px" class="d-block w-100" alt="...">
+                <img src="aset/gambar/x.jpeg" style="height:420px; width:350px" class="d-block w-100" alt="...">
+              </div>
+			  <div class="carousel-item">
+                <img src="aset/gambar/y.jpg" style="height:420px; width:350px" class="d-block w-100" alt="...">
               </div>
             </div>
           </div>
@@ -243,6 +313,11 @@
                 >
               </h1></marquee
             >
+          </div>
+          <div class="card" style="background-color: #63c5da">
+            <marquee class="mt-1">
+              <p class="text-white" style="font-size:x-large;">MASUK LINK BERIKUT UNTUK MEMBERI NILAI KEPUASAN ANDA TERHADAP PELAYANAN KAMI: <u>bit.ly/KuesionerSKM_RSUAmanah</u></p>
+            </marquee>
           </div>
         </div>
       </div>
